@@ -10,8 +10,8 @@ ExecStartPre=-/usr/bin/docker rm -f gogs
 ExecStart=/usr/bin/docker run \
   --name gogs \
   -v gogs-data:/data \
-  -p 10880:3000 \
-  -p 10022:22 \
+  -p 10880:10880 \
+  -p 10022:10022 \
   gogs/gogs
 ExecStop=/usr/bin/docker stop gogs
 ExecStopPost=/usr/bin/docker rm gogs
