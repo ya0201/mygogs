@@ -1,0 +1,23 @@
+[Unit]
+Description=PostgreSQL for Gogs (Docker)
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+EnvironmentFile=/etc/gogs/postgres.env
+ExecStartPre=/usr/bin/docker volume create gogs-postgres-data
+ExecStartPre=-/usr/bin/docker rm -f gogs-postgres
+ExecStart=/usr/bin/docker run \
+  --name gogs-postgres \
+  -e POSTGRES_USER=${POSTGRES_USER} \
+  -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} \
+  -e POSTGRES_DB=${POSTGRES_DB} \
+  -v gogs-postgres-data:/var/lib/postgresql/data \
+  -p 5432:5432 \
+  postgres:15
+ExecStop=/usr/bin/docker stop gogs-postgres
+ExecStopPost=/usr/bin/docker rm gogs-postgres
+
+[Install]
+WantedBy=multi-user.target
