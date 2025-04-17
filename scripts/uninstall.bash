@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
 function main() {
-  systemctl disable mygogs.service
-  rm -f /etc/systemd/system/mygogs.service
+  for f in $(find files -name '*.service'); do
+    systemctl disable $(basename $f)
+    rm -f /etc/systemd/system/$(basename $f)
+  done
 
   systemctl daemon-reload
   systemctl reset-failed
